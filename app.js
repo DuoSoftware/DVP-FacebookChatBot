@@ -28,11 +28,12 @@ var https_options = {
 var server = restify.createServer(https_options);
 
 server.get('/', function(req, res) {
-    console.log(req);
+    console.log("Server.........................");
     res.send('It works!');
 });
 
 server.get('/webhook', function(req, res) {
+    console.log("Server Webhook......");
     if (
         req.params.hub.mode == 'subscribe' &&
         req.params.hub.verify_token == 'token'
@@ -47,7 +48,7 @@ server.get('/webhook', function(req, res) {
 
 server.post('/webhook', function (req, res) {
     var data = req.body;
-
+    console.log("Server Webhook...... > " +data);
     // Make sure this is a page subscription
     if (data.object === 'page') {
 
