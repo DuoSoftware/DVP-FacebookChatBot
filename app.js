@@ -1,3 +1,7 @@
+/**
+ * Created by Waruna on 2/20/2017.
+ */
+
 var restify = require('restify');
 var builder = require('botbuilder');
 var jsonwebtoken = require('jsonwebtoken');
@@ -7,12 +11,11 @@ var util = require("util");
 var moment  = require('moment');
 var uuid = require('node-uuid');
 var request = require('request');
-var restify = require('restify');
-var fs = require('fs');
-
 
 var sockets = {};
 
+var restify = require('restify');
+var fs = require('fs');
 
 
 var https_options = {
@@ -23,10 +26,6 @@ var https_options = {
 
 
 var server = restify.createServer(https_options);
-server.listen(process.env.port || process.env.PORT || 443, function () {
-    console.log('%s listening to %s', server.name, server.url);
-});
-
 
 server.get('/', function(req, res) {
     console.log(req);
@@ -82,98 +81,6 @@ function receivedMessage(event) {
 }
 
 
-
-
-////////////////////agent card///////////////////////////////////////////////////////////////////////////
-
-
-function createAnimationCard(session, name, avatar) {
-    return new builder.ThumbnailCard(session)
-        .title('Agent found')
-        .subtitle(name)
-        .text("Agents greeting can be added !!!!!!!!!!")
-        .images([builder.CardImage.create(session, avatar)]);
-};
-
-
-function createCSATCard(session, name, avatar) {
-    return new builder.ThumbnailCard(session)
-        .title('customer satisfaction survey')
-        .subtitle(name)
-        .text("Are you satisfied with our service ?")
-        .images([builder.CardImage.create(session, avatar)])
-        .buttons([
-            builder.CardAction.postBack(session, 'good', 'Satisfied'),
-            builder.CardAction.postBack(session, 'bad', 'Not Satisfied')
-        ]);
-}
-
-
-
-function CreateSubmission(session, requester, submitter, satisfaction,contact, cb){
-
-    var token = util.format("Bearer %s",config.Host.token);
-    if((config.Services && config.Services.csaturl && config.Services.csatport && config.Services.csatversion)) {
-
-
-        //console.log("CreateSubmission start");
-        var csatURL = util.format("http://%s/DVP/API/%s/CustomerSatisfaction/Submission/ByEngagement", config.Services.csaturl, config.Services.csatversion);
-        if (validator.isIP(config.Services.csaturl))
-            csatURL = util.format("http://%s:%d/DVP/API/%s/CustomerSatisfaction/Submission/ByEngagement", config.Services.csaturl, config.Services.csatport, config.Services.csatversion);
-
-        var csatData =  {
-
-            requester: requester,
-            submitter: submitter,
-            engagement: session,
-            method:'chat',
-            satisfaction: satisfaction,
-            contact: contact
-
-
-        };
-
-
-
-        // logger.debug("Calling CSAT service URL %s", ticketURL);
-        // logger.debug(csatData);
-
-        request({
-            method: "POST",
-            url: csatURL,
-            headers: {
-                authorization: token,
-                companyinfo: util.format("%d:%d", config.Host.tenant, config.Host.company)
-            },
-            json: csatData
-        }, function (_error, _response, datax) {
-
-
-            try {
-
-                console.log(_response.body);
-
-                if (!_error && _response && _response.statusCode == 200 && _response.body && _response.body.IsSuccess) {
-
-                    cb(true, _response.body.Result);
-
-                }else{
-
-                    // logger.error("There is an error in  create csat for this session "+ session);
-
-                    cb(false, undefined);
-
-
-                }
-            }
-            catch (excep) {
-
-                //logger.error("There is an error in  create csat for this session "+ session, excep);
-                cb(false, undefined);
-
-            }
-        });
-    }
-}
-
-
+server.listen(443, function () {
+    console.log('%s listening at %s', server.name, server.url);
+});
