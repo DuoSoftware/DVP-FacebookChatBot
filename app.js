@@ -27,6 +27,12 @@ var https_options = {
 
 var server = restify.createServer(https_options);
 
+server.pre(restify.pre.userAgentConnection());
+server.use(restify.bodyParser({mapParams: false}));
+server.use(restify.queryParser());
+server.use(restify.CORS());
+server.use(restify.fullResponse());
+
 server.get('/', function(req, res) {
     console.log("Server.........................");
     res.send('It works!');
