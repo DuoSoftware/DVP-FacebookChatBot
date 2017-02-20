@@ -6,9 +6,6 @@ var jwt = require('restify-jwt');
 var mongoose = require('mongoose');
 var secret = require('dvp-common/Authentication/Secret.js');
 var authorization = require('dvp-common/Authentication/Authorization.js');
-var twitterService = require('./Services/twitter');
-var emailService = require('./Services/mail');
-var smsService = require('./Services/sms');
 var request = require("request");
 var format = require("stringformat");
 var validator = require('validator');
@@ -24,9 +21,6 @@ var serverID = config.Host.ServerID;
 var token = config.Services.accessToken;
 
 
-var smsAsync = require('./Services/sms-amqp');
-var twitterAsync = require('./Services/twitter-amqp');
-var fbAsync = require ('./Services/FacebookClient-amqp');
 
 
 restify.CORS.ALLOW_HEADERS.push('authorization');
