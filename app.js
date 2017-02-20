@@ -54,7 +54,7 @@ server.get('/webhook', function(req, res) {
 
 server.post('/webhook', function (req, res) {
     var data = req.body;
-    console.log("Server Webhook...... > " +JSON.parse(data));
+    console.log("Server Webhook...... > " +JSON.stringify(data));
     // Make sure this is a page subscription
     if (data.object === 'page') {
 
